@@ -8,12 +8,15 @@ export class RequestAdapter {
     this.request = request;
 
     const url = new URL(request.url);
-    const queryString = url.search.slice(1).split("&");
-
-    queryString.forEach((item) => {
-      const kv = item.split("=");
-      if (kv[0]) {
-        this.params[kv[0]] = kv[1] || true;
+    url.searchParams.forEach((value, key) => {
+      if (this.params[key] !== undefined) {
+        if (Array.isArray(this.params[key])) {
+          this.params[key].push(value);
+        } else {
+          this.params[key] = [this.params[key], value];
+        }
+      } else {
+        this.params[key] = value;
       }
     });
   }

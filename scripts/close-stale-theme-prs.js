@@ -5,7 +5,7 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 import { debug, setFailed } from "@actions/core";
-import github from "@actions/github";
+import { getOctokit, context } from "@actions/github";
 import { RequestError } from "@octokit/request-error";
 import { getGithubToken, getRepoInfo } from "./helpers.js";
 
@@ -136,8 +136,8 @@ const run = async () => {
     const dryRun = process.env.DRY_RUN === "true" || false;
     const staleDays = process.env.STALE_DAYS || 20;
     debug("Creating octokit client...");
-    const octokit = github.getOctokit(getGithubToken());
-    const { owner, repo } = getRepoInfo(github.context);
+    const octokit = getOctokit(getGithubToken());
+    const { owner, repo } = getRepoInfo(context);
     const reviewer = getReviewer();
 
     // Retrieve all theme pull requests.

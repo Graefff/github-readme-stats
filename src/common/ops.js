@@ -33,6 +33,9 @@ const parseArray = (str) => {
   if (!str) {
     return [];
   }
+  if (Array.isArray(str)) {
+    return str;
+  }
   return str.split(",");
 };
 

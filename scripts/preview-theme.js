@@ -5,7 +5,7 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 import { debug, setFailed } from "@actions/core";
-import github from "@actions/github";
+import { getOctokit, context } from "@actions/github";
 import ColorContrastChecker from "color-contrast-checker";
 import { info } from "console";
 import Hjson from "hjson";
@@ -82,7 +82,7 @@ const getPrNumber = () => {
     return process.env.MOCK_PR_NUMBER; // For testing purposes.
   }
 
-  const pullRequest = github.context.payload.pull_request;
+  const pullRequest = context.payload.pull_request;
   if (!pullRequest) {
     throw Error("Could not get pull request number from context");
   }
@@ -388,15 +388,15 @@ const DRY_RUN = process.env.DRY_RUN === "true" || false;
 export const run = async () => {
   try {
     debug("Retrieve action information from context...");
-    debug(`Context: ${inspect(github.context)}`);
+    debug(`Context: ${inspect(context)}`);
     let commentBody = `
       \r# ${COMMENT_TITLE}
       \r${THEME_CONTRIB_GUIDELINES}
     `;
     const ccc = new ColorContrastChecker();
-    OCTOKIT = github.getOctokit(getGithubToken());
+    OCTOKIT = getOctokit(getGithubToken());
     PULL_REQUEST_ID = getPrNumber();
-    const { owner, repo } = getRepoInfo(github.context);
+    const { owner, repo } = getRepoInfo(context);
     OWNER = owner;
     REPO = repo;
     const commenter = getCommenter();

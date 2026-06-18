@@ -20,9 +20,14 @@ const request = (data, headers, useFetch = false) => {
       headers,
       body: JSON.stringify(data),
     }).then(async (resp) => {
+      const contentType = resp.headers.get("Content-Type") || "";
+      const isJson = contentType.includes("application/json");
+      const responseData = isJson ? await resp.json() : await resp.text();
       return {
-        ...resp,
-        data: await resp.json(),
+        status: resp.status,
+        statusText: resp.statusText,
+        headers: Object.fromEntries(resp.headers.entries()),
+        data: responseData,
       };
     });
   }
