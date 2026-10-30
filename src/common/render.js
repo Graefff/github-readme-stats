@@ -31,22 +31,6 @@ const flexLayout = ({ items, gap, direction, sizes = [] }) => {
 };
 
 /**
- * Creates a node to display the primary programming language of the repository/gist.
- *
- * @param {string} langName Language name.
- * @param {string} langColor Language color.
- * @returns {string} Language display SVG object.
- */
-const createLanguageNode = (langName, langColor) => {
-  return `
-    <g data-testid="primary-lang">
-      <circle data-testid="lang-color" cx="0" cy="-5" r="6" fill="${langColor}" />
-      <text data-testid="lang-name" class="gray" x="15">${langName}</text>
-    </g>
-    `;
-};
-
-/**
  * Create a node to indicate progress in percentage along a horizontal line.
  *
  * @param {Object} params Object that contains the createProgressNode parameters.
@@ -84,35 +68,6 @@ const createProgressNode = ({
       </svg>
     </svg>
   `;
-};
-
-/**
- * Creates an icon with label to display repository/gist stats like forks, stars, etc.
- *
- * @param {string} icon The icon to display.
- * @param {number|string} label The label to display.
- * @param {string} testid The testid to assign to the label.
- * @param {number} iconSize The size of the icon.
- * @returns {string} Icon with label SVG object.
- */
-const iconWithLabel = (icon, label, testid, iconSize) => {
-  if (typeof label === "number" && label <= 0) {
-    return "";
-  }
-  const iconSvg = `
-      <svg
-        class="icon"
-        y="-12"
-        viewBox="0 0 16 16"
-        version="1.1"
-        width="${iconSize}"
-        height="${iconSize}"
-      >
-        ${icon}
-      </svg>
-    `;
-  const text = `<text data-testid="${testid}" class="gray">${label}</text>`;
-  return flexLayout({ items: [iconSvg, text], gap: 20 }).join("");
 };
 
 /**
@@ -209,6 +164,30 @@ const renderError = ({
   `;
 };
 
+// prettier-ignore
+const WIDTHS = [
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0.2796875, 0.2765625,
+  0.3546875, 0.5546875, 0.5546875, 0.8890625, 0.665625, 0.190625,
+  0.3328125, 0.3328125, 0.3890625, 0.5828125, 0.2765625, 0.3328125,
+  0.2765625, 0.3015625, 0.5546875, 0.5546875, 0.5546875, 0.5546875,
+  0.5546875, 0.5546875, 0.5546875, 0.5546875, 0.5546875, 0.5546875,
+  0.2765625, 0.2765625, 0.584375, 0.5828125, 0.584375, 0.5546875,
+  1.0140625, 0.665625, 0.665625, 0.721875, 0.721875, 0.665625,
+  0.609375, 0.7765625, 0.721875, 0.2765625, 0.5, 0.665625,
+  0.5546875, 0.8328125, 0.721875, 0.7765625, 0.665625, 0.7765625,
+  0.721875, 0.665625, 0.609375, 0.721875, 0.665625, 0.94375,
+  0.665625, 0.665625, 0.609375, 0.2765625, 0.3546875, 0.2765625,
+  0.4765625, 0.5546875, 0.3328125, 0.5546875, 0.5546875, 0.5,
+  0.5546875, 0.5546875, 0.2765625, 0.5546875, 0.5546875, 0.221875,
+  0.240625, 0.5, 0.221875, 0.8328125, 0.5546875, 0.5546875,
+  0.5546875, 0.5546875, 0.3328125, 0.5, 0.2765625, 0.5546875,
+  0.5, 0.721875, 0.5, 0.5, 0.5, 0.3546875, 0.259375, 0.353125, 0.5890625,
+];
+
+const AVG_WIDTH = 0.5279276315789471;
+
 /**
  * Retrieve text length.
  *
@@ -218,45 +197,21 @@ const renderError = ({
  * @returns {number} Text length.
  */
 const measureText = (str, fontSize = 10) => {
-  // prettier-ignore
-  const widths = [
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0.2796875, 0.2765625,
-    0.3546875, 0.5546875, 0.5546875, 0.8890625, 0.665625, 0.190625,
-    0.3328125, 0.3328125, 0.3890625, 0.5828125, 0.2765625, 0.3328125,
-    0.2765625, 0.3015625, 0.5546875, 0.5546875, 0.5546875, 0.5546875,
-    0.5546875, 0.5546875, 0.5546875, 0.5546875, 0.5546875, 0.5546875,
-    0.2765625, 0.2765625, 0.584375, 0.5828125, 0.584375, 0.5546875,
-    1.0140625, 0.665625, 0.665625, 0.721875, 0.721875, 0.665625,
-    0.609375, 0.7765625, 0.721875, 0.2765625, 0.5, 0.665625,
-    0.5546875, 0.8328125, 0.721875, 0.7765625, 0.665625, 0.7765625,
-    0.721875, 0.665625, 0.609375, 0.721875, 0.665625, 0.94375,
-    0.665625, 0.665625, 0.609375, 0.2765625, 0.3546875, 0.2765625,
-    0.4765625, 0.5546875, 0.3328125, 0.5546875, 0.5546875, 0.5,
-    0.5546875, 0.5546875, 0.2765625, 0.5546875, 0.5546875, 0.221875,
-    0.240625, 0.5, 0.221875, 0.8328125, 0.5546875, 0.5546875,
-    0.5546875, 0.5546875, 0.3328125, 0.5, 0.2765625, 0.5546875,
-    0.5, 0.721875, 0.5, 0.5, 0.5, 0.3546875, 0.259375, 0.353125, 0.5890625,
-  ];
-
-  const avg = 0.5279276315789471;
-  return (
-    str
-      .split("")
-      .map((c) =>
-        c.charCodeAt(0) < widths.length ? widths[c.charCodeAt(0)] : avg,
-      )
-      .reduce((cur, acc) => acc + cur) * fontSize
-  );
+  if (!str) {
+    return 0;
+  }
+  let total = 0;
+  for (let i = 0; i < str.length; i++) {
+    const code = str.charCodeAt(i);
+    total += code < WIDTHS.length ? WIDTHS[code] : AVG_WIDTH;
+  }
+  return total * fontSize;
 };
 
 export {
   ERROR_CARD_LENGTH,
   renderError,
-  createLanguageNode,
   createProgressNode,
-  iconWithLabel,
   flexLayout,
   measureText,
 };

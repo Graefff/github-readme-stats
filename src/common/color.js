@@ -2,6 +2,9 @@
 
 import { themes } from "../../themes/index.js";
 
+const HEX_COLOR_REGEX =
+  /^([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3}|[A-Fa-f0-9]{4})$/;
+
 /**
  * Checks if a string is a valid hex color.
  *
@@ -9,9 +12,7 @@ import { themes } from "../../themes/index.js";
  * @returns {boolean} True if the given string is a valid hex color.
  */
 const isValidHexColor = (hexColor) => {
-  return new RegExp(
-    /^([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3}|[A-Fa-f0-9]{4})$/,
-  ).test(hexColor);
+  return HEX_COLOR_REGEX.test(hexColor);
 };
 
 /**

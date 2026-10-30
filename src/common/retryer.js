@@ -70,11 +70,11 @@ const retryer = async (fetcher, variables, env, retries = 0) => {
     // finally return the response
     return response;
   } catch (err) {
-    // prettier-ignore
     // also checking for bad credentials if any tokens gets invalidated
-    const isBadCredential = err.response.data && err.response.data.message === "Bad credentials";
+    const isBadCredential =
+      err?.response?.data && err.response.data.message === "Bad credentials";
     const isAccountSuspended =
-      err.response.data &&
+      err?.response?.data &&
       err.response.data.message === "Sorry. Your account was suspended.";
 
     if (isBadCredential || isAccountSuspended) {
@@ -82,8 +82,10 @@ const retryer = async (fetcher, variables, env, retries = 0) => {
       retries++;
       // directly return from the function
       return retryer(fetcher, variables, env, retries);
-    } else {
+    } else if (err?.response) {
       return err.response;
+    } else {
+      throw err;
     }
   }
 };

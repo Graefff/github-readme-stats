@@ -20,7 +20,7 @@ const RANK_ONLY_CARD_DEFAULT_WIDTH = 290;
 /**
  * Long locales that need more space for text. Keep sorted alphabetically.
  *
- * @type {(keyof typeof wakatimeCardLocales["wakatimecard.title"])[]}
+ * @type {string[]}
  */
 const LONG_LOCALES = [
   "az",

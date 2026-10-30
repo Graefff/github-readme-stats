@@ -32,11 +32,6 @@ export type StatCardOptions = CommonOptions & {
   show: string[];
 };
 
-export type RepoCardOptions = CommonOptions & {
-  show_owner: boolean;
-  description_lines_count: number;
-};
-
 export type TopLangOptions = CommonOptions & {
   hide_title: boolean;
   card_width: number;
@@ -47,21 +42,4 @@ export type TopLangOptions = CommonOptions & {
   disable_animations: boolean;
   hide_progress: boolean;
   stats_format: "percentages" | "bytes";
-};
-
-type WakaTimeOptions = CommonOptions & {
-  hide_title: boolean;
-  hide: string[];
-  card_width: number;
-  line_height: string;
-  hide_progress: boolean;
-  custom_title: string;
-  layout: "compact" | "normal";
-  langs_count: number;
-  display_format: "time" | "percent";
-  disable_animations: boolean;
-};
-
-export type GistCardOptions = CommonOptions & {
-  show_owner: boolean;
 };
