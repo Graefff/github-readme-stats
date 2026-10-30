@@ -64,4 +64,3 @@ it("test /api/top-langs", async () => {
     await topLangs(req, res);
   });
 });
-

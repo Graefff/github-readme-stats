@@ -6,6 +6,34 @@ export const themes = {
     bg_color: "fffefe",
     border_color: "e4e2e2",
   },
+  light_github: {
+    title_color: "0969da",
+    icon_color: "0969da",
+    text_color: "59636e",
+    bg_color: "ffffff",
+    border_color: "d1d9e0",
+  },
+  dark_github: {
+    title_color: "4493f8",
+    icon_color: "4493f8",
+    text_color: "9198a1",
+    bg_color: "0d1117",
+    border_color: "3d444d",
+  },
+  light_github_repocard: {
+    title_color: "0969da",
+    icon_color: "59636e",
+    text_color: "59636e",
+    bg_color: "ffffff",
+    border_color: "d1d9e0",
+  },
+  dark_github_repocard: {
+    title_color: "4493f8",
+    icon_color: "9198a1",
+    text_color: "9198a1",
+    bg_color: "0d1117",
+    border_color: "3d444d",
+  },
   default_repocard: {
     title_color: "2f80ed",
     icon_color: "586069", // icon color is different

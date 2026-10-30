@@ -10,7 +10,12 @@ export default {
     const res = new ResponseAdapter();
 
     const { pathname } = new URL(request.url);
-    if (pathname === "/") {
+    const route =
+      pathname.length > 1 && pathname.endsWith("/")
+        ? pathname.slice(0, -1)
+        : pathname;
+
+    if (route === "/") {
       return new Response(
         `<!DOCTYPE html>
           <head>
@@ -37,7 +42,7 @@ export default {
       );
     }
 
-    if (pathname === "/robots.txt") {
+    if (route === "/robots.txt") {
       return new Response("User-agent: *\nDisallow: /\nAllow: /$", {
         headers: {
           "Content-Type": "text/plain;charset=UTF-8",
@@ -46,9 +51,9 @@ export default {
       });
     }
 
-    if (pathname === "/api" || pathname === "/api/top-langs") {
+    if (route === "/api" || route === "/api/top-langs") {
       try {
-        if (pathname === "/api") {
+        if (route === "/api") {
           await indexHandler(req, res, env);
         } else {
           await topLangsHandler(req, res, env);
